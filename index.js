@@ -40,24 +40,6 @@ bot.registerCommand("pong", ["Pang!", "Peng!", "Ping!", "Pung!"], {
     "This command could also be used to check if the bot is up. Or entertainment when you're bored."
 });
 
-var echoCommand = bot.registerCommand(
-  "echo",
-  (msg, args) => {
-    // Make an echo command
-    if (args.length === 0) {
-      // If the user just typed "!echo", say "Invalid input"
-      return "Invalid input";
-    }
-    var text = args.join(" "); // Make a string of the text after the command label
-    return text; // Return the generated string
-  },
-  {
-    description: "Make the bot say something",
-    fullDescription: "The bot will echo whatever is after the command label.",
-    usage: "<text>"
-  }
-);
-
 var vibeCheck = bot.registerCommand(
   "vibecheck",
   (msg, args) => {
@@ -70,9 +52,6 @@ var vibeCheck = bot.registerCommand(
     if (!args[0].includes("@")) {
       return "Not a valid fucking username you fucking incel. Fuck you and your toxic masculinity god I fucking hate people like you (although i do NOT believe in 'God' as I am an athiest.)";
     }
-    if (username.includes("Alex") || username.includes("alex")) {
-      return `${username} passed the vibecheck`;
-    }
     if (Math.round(Math.random()) == 1) {
       return `${username} passed the vibecheck`;
     } else {
@@ -80,8 +59,8 @@ var vibeCheck = bot.registerCommand(
     }
   },
   {
-    description: "Make the bot say something",
-    fullDescription: "The bot will echo whatever is after the command label.",
+    description: "Vibechecks a user",
+    fullDescription: "Give a username as the first argument and see whether or not they pass the vibecheck.",
     usage: "<text>"
   }
 );
@@ -122,8 +101,8 @@ var upvote = bot.registerCommand(
     return `An upvote? Very cool. ${username}'s score is now ${result}`;
   },
   {
-    description: "Make the bot say something",
-    fullDescription: "The bot will echo whatever is after the command label.",
+    description: "Upvotes a user",
+    fullDescription: "Upvotes a user by their username",
     usage: "<text>"
   }
 );
@@ -143,35 +122,12 @@ var downvote = bot.registerCommand(
     return `Oof ouchie a downvote! ${username}'s score is now ${result}`;
   },
   {
-    description: "Make the bot say something",
-    fullDescription: "The bot will echo whatever is after the command label.",
+    description: "Downvotes a user",
+    fullDescription: "Downvote a user by their username",
     usage: "<text>"
   }
 );
 
-echoCommand.registerSubcommand(
-  "reverse",
-  (msg, args) => {
-    // Make a reverse subcommand under echo
-    if (args.length === 0) {
-      // If the user just typed "!echo reverse", say "Invalid input"
-      return "Invalid input";
-    }
-    var text = args.join(" "); // Make a string of the text after the command label
-    text = text
-      .split("")
-      .reverse()
-      .join(""); // Reverse the string
-    return text; // Return the generated string
-  },
-  {
-    description: "Make the bot say something in reverse",
-    fullDescription:
-      "The bot will echo, in reverse, whatever is after the command label.",
-    usage: "<text>"
-  }
-);
 
-echoCommand.registerSubcommandAlias("backwards", "reverse"); // Alias "!echo backwards" to "!echo reverse"
 
 bot.connect();
