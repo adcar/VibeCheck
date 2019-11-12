@@ -8,7 +8,7 @@ jsonfile
   .catch(error => console.error(error));
 
 var bot = new Eris.CommandClient(
-  "NjQzNTUzOTU0MDMwMTU3ODQ1.XcnKmw._M-hioIFH_7SqaeRQ47TFdViKyY",
+  process.env.BOT_TOKEN,
   {},
   {
     description: "A test bot made with Eris",
