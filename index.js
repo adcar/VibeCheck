@@ -6,8 +6,8 @@ var bot = new Eris.CommandClient(
   process.env.BOT_TOKEN,
   {},
   {
-    description: "A test bot made with Eris",
-    owner: "somebody",
+    description: "Checks your vibe",
+    owner: "Alexander Cardosi",
     prefix: "!"
   }
 );
@@ -34,6 +34,7 @@ bot.registerCommand("pong", ["Pang!", "Peng!", "Ping!", "Pung!"], {
   fullDescription:
     "This command could also be used to check if the bot is up. Or entertainment when you're bored."
 });
+
 
 var vibeCheck = bot.registerCommand(
   "vibecheck",
