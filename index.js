@@ -2,11 +2,6 @@ const Eris = require("eris");
 const jsonfile = require("jsonfile");
 const invalidUserMsg = "Not a valid fucking username you fucking incel. Fuck you and your toxic masculinity god I fucking hate people like you (although i do NOT believe in 'God' as I am an athiest.)"; 
 const file = "./data.json";
-jsonfile
-  .readFile(file)
-  .then(obj => console.dir(obj))
-  .catch(error => console.error(error));
-
 var bot = new Eris.CommandClient(
   process.env.BOT_TOKEN,
   {},
