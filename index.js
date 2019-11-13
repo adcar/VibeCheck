@@ -1,6 +1,7 @@
 const Eris = require("eris");
 const jsonfile = require("jsonfile");
-const invalidUserMsg = "Not a valid fucking username you fucking incel. Fuck you and your toxic masculinity god I fucking hate people like you (although i do NOT believe in 'God' as I am an athiest.)"; 
+const invalidUserMsg =
+  "Not a valid fucking username you fucking incel. Fuck you and your toxic masculinity god I fucking hate people like you (although i do NOT believe in 'God' as I am an athiest.)";
 const file = "./data.json";
 var bot = new Eris.CommandClient(
   process.env.BOT_TOKEN,
@@ -35,6 +36,17 @@ bot.registerCommand("pong", ["Pang!", "Peng!", "Ping!", "Pung!"], {
     "This command could also be used to check if the bot is up. Or entertainment when you're bored."
 });
 
+bot.registerCommand(
+  "score",
+  (msg, args) => {
+    obj = jsonfile.readFileSync(file);
+    return JSON.stringify(obj);
+  },
+  {
+    description: "Karma score of every user",
+    fullDescription: "Displays all karam scores for every user"
+  }
+);
 
 var vibeCheck = bot.registerCommand(
   "vibecheck",
@@ -51,7 +63,7 @@ var vibeCheck = bot.registerCommand(
 
     const userIsInGuild = !!member;
     if (!userIsInGuild) {
-       return msg.channel.createMessage(invalidUserMsg);
+      return msg.channel.createMessage(invalidUserMsg);
     }
 
     if (Math.round(Math.random()) == 1) {
@@ -62,7 +74,8 @@ var vibeCheck = bot.registerCommand(
   },
   {
     description: "Vibechecks a user",
-    fullDescription: "Give a username as the first argument and see whether or not they pass the vibecheck.",
+    fullDescription:
+      "Give a username as the first argument and see whether or not they pass the vibecheck.",
     usage: "<mention>"
   }
 );
@@ -101,7 +114,7 @@ var upvote = bot.registerCommand(
     const member = guild.members.get(userId);
     const userIsInGuild = !!member;
     if (!userIsInGuild) {
-	    return msg.channel.createMessage(invalidUserMsg);
+      return msg.channel.createMessage(invalidUserMsg);
     }
     const result = await vote("upvote", mention);
     return `An upvote? Very cool. ${mention}'s score is now ${result}`;
@@ -127,7 +140,7 @@ var downvote = bot.registerCommand(
 
     const userIsInGuild = !!member;
     if (!userIsInGuild) {
-       return msg.channel.createMessage(invalidUserMsg);
+      return msg.channel.createMessage(invalidUserMsg);
     }
     const result = await vote("downvote", mention);
     return `Oof ouchie a downvote! ${mention}'s score is now ${result}`;
@@ -139,5 +152,7 @@ var downvote = bot.registerCommand(
   }
 );
 
+bot.registerCommandAlias("u", "upvote");
+bot.registerCommandAlias("d", "downvote");
 
 bot.connect();
