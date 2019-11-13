@@ -62,7 +62,7 @@ var vibeCheck = bot.registerCommand(
   {
     description: "Vibechecks a user",
     fullDescription: "Give a username as the first argument and see whether or not they pass the vibecheck.",
-    usage: "<text>"
+    usage: "<mention>"
   }
 );
 
@@ -108,7 +108,7 @@ var upvote = bot.registerCommand(
   {
     description: "Upvotes a user",
     fullDescription: "Upvotes a user by their username",
-    usage: "<text>"
+    usage: "<mention>"
   }
 );
 
@@ -134,7 +134,7 @@ var downvote = bot.registerCommand(
   {
     description: "Downvotes a user",
     fullDescription: "Downvote a user by their username",
-    usage: "<text>"
+    usage: "<mention>"
   }
 );
 
