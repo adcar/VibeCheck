@@ -1,6 +1,6 @@
 const Eris = require("eris");
 const jsonfile = require("jsonfile");
-
+const invalidUserMsg = "Not a valid fucking username you fucking incel. Fuck you and your toxic masculinity god I fucking hate people like you (although i do NOT believe in 'God' as I am an athiest.)"; 
 const file = "./data.json";
 jsonfile
   .readFile(file)
@@ -48,14 +48,20 @@ var vibeCheck = bot.registerCommand(
       // If the user just typed "!echo", say "Invalid input"
       return "Invalid input";
     }
-    const username = args[0];
-    if (!args[0].includes("@")) {
-      return "Not a valid fucking username you fucking incel. Fuck you and your toxic masculinity god I fucking hate people like you (although i do NOT believe in 'God' as I am an athiest.)";
+    const guild = msg.channel.guild;
+    const mention = args[0];
+    const userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
+    const member = guild.members.get(userId);
+
+    const userIsInGuild = !!member;
+    if (!userIsInGuild) {
+       return msg.channel.createMessage(invalidUserMsg);
     }
+
     if (Math.round(Math.random()) == 1) {
-      return `${username} passed the vibecheck`;
+      return `${mention} passed the vibecheck`;
     } else {
-      return `${username} has failed the vibecheck`;
+      return `${mention} has failed the vibecheck`;
     }
   },
   {
@@ -93,12 +99,16 @@ var upvote = bot.registerCommand(
       // If the user just typed "!echo", say "Invalid input"
       return "Invalid input";
     }
-    const username = args[0];
-    if (!args[0].includes("@")) {
-      return "Not a valid fucking username you fucking incel. Fuck you and your toxic masculinity god I fucking hate people like you (although i do NOT believe in 'God' as I am an athiest.)";
+    const guild = msg.channel.guild;
+    const mention = args[0];
+    const userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
+    const member = guild.members.get(userId);
+    const userIsInGuild = !!member;
+    if (!userIsInGuild) {
+	    return msg.channel.createMessage(invalidUserMsg);
     }
-    const result = await vote("upvote", username);
-    return `An upvote? Very cool. ${username}'s score is now ${result}`;
+    const result = await vote("upvote", mention);
+    return `An upvote? Very cool. ${mention}'s score is now ${result}`;
   },
   {
     description: "Upvotes a user",
@@ -114,12 +124,17 @@ var downvote = bot.registerCommand(
       // If the user just typed "!echo", say "Invalid input"
       return "Invalid input";
     }
-    const username = args[0];
-    if (!args[0].includes("@")) {
-      return "Not a valid fucking username you fucking incel. Fuck you and your toxic masculinity god I fucking hate people like you (although i do NOT believe in 'God' as I am an athiest.)";
+    const guild = msg.channel.guild;
+    const mention = args[0];
+    const userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
+    const member = guild.members.get(userId);
+
+    const userIsInGuild = !!member;
+    if (!userIsInGuild) {
+       return msg.channel.createMessage(invalidUserMsg);
     }
-    const result = await vote("downvote", username);
-    return `Oof ouchie a downvote! ${username}'s score is now ${result}`;
+    const result = await vote("downvote", mention);
+    return `Oof ouchie a downvote! ${mention}'s score is now ${result}`;
   },
   {
     description: "Downvotes a user",
@@ -127,7 +142,6 @@ var downvote = bot.registerCommand(
     usage: "<text>"
   }
 );
-
 
 
 bot.connect();
