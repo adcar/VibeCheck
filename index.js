@@ -44,7 +44,7 @@ bot.registerCommand(
   },
   {
     description: "Karma score of every user",
-    fullDescription: "Displays all karam scores for every user"
+    fullDescription: "Displays all karma scores for every user"
   }
 );
 
