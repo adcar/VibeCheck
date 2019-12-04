@@ -65,6 +65,7 @@ var vibeCheck = bot.registerCommand(
     if (!userIsInGuild) {
       return msg.channel.createMessage(invalidUserMsg);
     }
+   const RIGGED = mention !== "<@194997493078032384>");
     if (Math.round(Math.random()) == 1){
       return `${mention} passed the vibecheck`;
     } else {
