@@ -2,7 +2,7 @@
 
 
 ## Set up VibeCheck locally
-## Make sure you have NodeJS version 10 or above installed.
+### Make sure you have NodeJS version 10 or above installed.
 
 ```
 $ node --version
@@ -17,7 +17,7 @@ Then go to the "bot" section and under "token" click "copy"
 
 Now you have your token which you will use when running VibeCheck
 
-## Downloading & Running VibeCheck
+### Downloading & Running VibeCheck
 
 ```
 git clone https://github.com/adcar/VibeCheck.git
