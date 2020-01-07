@@ -22,5 +22,6 @@ Now you have your token which you will use when running VibeCheck
 ```
 git clone https://github.com/adcar/VibeCheck.git
 cd VibeCheck
+npm install
 BOT_TOKEN=<your-bot-token> node index.js
 ```
