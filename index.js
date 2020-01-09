@@ -28,7 +28,7 @@ bot.registerCommand(
     // Convert object into an array then sort it
     const sortedArr = Object.entries(obj).sort((a, b) => b[1] - a[1]);
 
-    // Conver the array back into an object called objSorted
+    // Convert the array back into an object called objSorted
     let objSorted = {};
     sortedArr.forEach(function(item) {
       objSorted[item[0]] = item[1];
