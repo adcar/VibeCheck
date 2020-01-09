@@ -22,8 +22,30 @@ bot.registerCommandAlias("halp", "help"); // Alias !halp to !help
 bot.registerCommand(
   "score",
   (msg, args) => {
+    const guild = msg.channel.guild;
     obj = jsonfile.readFileSync(file);
-    return JSON.stringify(obj);
+
+    // Convert object into an array then sort it
+    const sortedArr = Object.entries(obj).sort((a, b) => b[1] - a[1]);
+
+    // Conver the array back into an object called objSorted
+    let objSorted = {};
+    sortedArr.forEach(function(item) {
+      objSorted[item[0]] = item[1];
+    });
+
+    // Create a template literal that will contain the score messages
+    let score = ``;
+
+    for (let key in objSorted) {
+      const member = guild.members.get(key);
+      let username = "<Not a user>";
+      if (member !== undefined) {
+        username = member.username;
+      }
+      score += `\n${username}'s score is ${obj[key]}`;
+    }
+    return score;
   },
   {
     description: "Karma score of every user",
@@ -63,7 +85,7 @@ bot.registerCommand(
   }
 );
 
-function vote(type, username, authorId) {
+function vote(type, userId, authorId) {
   obj = jsonfile.readFileSync(file);
   if (coolDownUsers.includes(authorId)) {
     return null;
@@ -74,19 +96,19 @@ function vote(type, username, authorId) {
       if (index !== -1) coolDownUsers.splice(index, 1);
     }, 180000); // 3 minutes
   }
-  if (!obj[username]) {
-    obj[username] = 0;
+  if (!obj[userId]) {
+    obj[userId] = 0;
   }
 
   if (type === "upvote") {
-    obj[username]++;
+    obj[userId]++;
     jsonfile.writeFileSync(file, obj);
-    return obj[username];
+    return obj[userId];
   }
   if (type === "downvote") {
-    obj[username]--;
+    obj[userId]--;
     jsonfile.writeFileSync(file, obj);
-    return obj[username];
+    return obj[userId];
   }
 }
 
@@ -109,7 +131,7 @@ bot.registerCommand(
     if (!userIsInGuild) {
       return msg.channel.createMessage(invalidUserMsg);
     }
-    const result = await vote("upvote", mention, msg.author.id);
+    const result = await vote("upvote", userId, msg.author.id);
     if (result === null) {
       return "fuck off";
     }
@@ -138,7 +160,7 @@ bot.registerCommand(
     if (!userIsInGuild) {
       return msg.channel.createMessage(invalidUserMsg);
     }
-    const result = await vote("downvote", mention, msg.author.id);
+    const result = await vote("downvote", userId, msg.author.id);
     if (result === null) {
       return "fuck off";
     }
