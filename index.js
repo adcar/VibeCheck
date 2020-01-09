@@ -1,7 +1,6 @@
 const Eris = require("eris");
 const jsonfile = require("jsonfile");
-const invalidUserMsg =
-  "Not a valid fucking username you fucking incel. Fuck you and your toxic masculinity god I fucking hate people like you (although i do NOT believe in 'God' as I am an athiest.)";
+const invalidUserMsg = "Yeah... um sweaty? That's not a valid username. K thx.";
 const file = "./data.json";
 var bot = new Eris.CommandClient(
   process.env.BOT_TOKEN,
@@ -32,7 +31,7 @@ bot.registerCommand(
   }
 );
 
-var vibeCheck = bot.registerCommand(
+bot.registerCommand(
   "vibecheck",
   (msg, args) => {
     // Make an echo command
@@ -49,8 +48,8 @@ var vibeCheck = bot.registerCommand(
     if (!userIsInGuild) {
       return msg.channel.createMessage(invalidUserMsg);
     }
-    
-    if (Math.round(Math.random()) == 1 && mention !== "<@194997493078032384>"){
+
+    if (Math.round(Math.random()) == 1 && mention !== "<@194997493078032384>") {
       return `${mention} passed the vibecheck`;
     } else {
       return `${mention} has failed the vibecheck`;
@@ -64,9 +63,17 @@ var vibeCheck = bot.registerCommand(
   }
 );
 
-function vote(type, username) {
+function vote(type, username, authorId) {
   obj = jsonfile.readFileSync(file);
-
+  if (coolDownUsers.includes(authorId)) {
+    return null;
+  } else {
+    coolDownUsers.push(authorId);
+    setTimeout(() => {
+      const index = coolDownUsers.indexOf(authorId);
+      if (index !== -1) coolDownUsers.splice(index, 1);
+    }, 180000); // 3 minutes
+  }
   if (!obj[username]) {
     obj[username] = 0;
   }
@@ -82,7 +89,9 @@ function vote(type, username) {
     return obj[username];
   }
 }
-var upvote = bot.registerCommand(
+
+let coolDownUsers = [];
+bot.registerCommand(
   "upvote",
   async (msg, args) => {
     // read from file
@@ -100,7 +109,10 @@ var upvote = bot.registerCommand(
     if (!userIsInGuild) {
       return msg.channel.createMessage(invalidUserMsg);
     }
-    const result = await vote("upvote", mention);
+    const result = await vote("upvote", mention, msg.author.id);
+    if (result === null) {
+      return "fuck off";
+    }
     return `An upvote? Very cool. ${mention}'s score is now ${result}`;
   },
   {
@@ -110,7 +122,7 @@ var upvote = bot.registerCommand(
   }
 );
 
-var downvote = bot.registerCommand(
+bot.registerCommand(
   "downvote",
   async (msg, args) => {
     if (args.length === 0) {
@@ -126,7 +138,10 @@ var downvote = bot.registerCommand(
     if (!userIsInGuild) {
       return msg.channel.createMessage(invalidUserMsg);
     }
-    const result = await vote("downvote", mention);
+    const result = await vote("downvote", mention, msg.author.id);
+    if (result === null) {
+      return "fuck off";
+    }
     return `Oof ouchie a downvote! ${mention}'s score is now ${result}`;
   },
   {
