@@ -116,14 +116,25 @@ function vote(type, userId, authorId) {
 }
 
 async function getUserIdFromMsg(msg, upvote) {
-  const lastMsgs = await msg.channel.getMessages(2, msg.id);
-  if (upvote) {
-    lastMsgs[0].addReaction("⬆");
-  } else {
-    lastMsgs[0].addReaction("⬇");
-  }
+  const lastMsgs = await msg.channel.getMessages(100, msg.id);
+  const userId = msg.author.id;
+  let msgToBeVoted;
+  lastMsgs.forEach(msg => {
+    if (msg.author.id !== bot.user.id && msg.author.id !== userId) {
+      msgToBeVoted = msg;
+    }
+  });
+  if (msgToBeVoted) {
+    if (upvote) {
+      msgToBeVoted.addReaction("⬆");
+    } else {
+      msgToBeVoted.addReaction("⬇");
+    }
 
-  return lastMsgs[0].author.id;
+    return msgToBeVoted.author.id;
+  } else {
+    return null;
+  }
 }
 
 let coolDownUsers = [];
@@ -133,6 +144,9 @@ bot.registerCommand(
     let userId;
     if (args.length === 0) {
       userId = await getUserIdFromMsg(msg, true);
+      if (userId === null) {
+        return msg.channel.createMessage("Couldn't find a message to upvote");
+      }
     } else {
       const mention = args[0];
       userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
@@ -164,6 +178,9 @@ bot.registerCommand(
     let userId;
     if (args.length === 0) {
       userId = await getUserIdFromMsg(msg, false);
+      if (userId === null) {
+        return msg.channel.createMessage("Couldn't find a message to upvote");
+      }
     } else {
       const mention = args[0];
       userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
