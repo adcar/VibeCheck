@@ -1,7 +1,7 @@
 const Eris = require("eris");
 const jsonfile = require("jsonfile");
 const invalidUserMsg = "Yeah... um sweaty? That's not a valid username. K thx.";
-const file = "./data.json";
+const file = "../data.json";
 var bot = new Eris.CommandClient(
   process.env.BOT_TOKEN,
   {},
@@ -81,11 +81,14 @@ bot.registerCommand(
     description: "Vibechecks a user",
     fullDescription:
       "Give a username as the first argument and see whether or not they pass the vibecheck.",
-    usage: "<mention>"
+    usage: "<[mention]>"
   }
 );
 
 function vote(type, userId, authorId) {
+  if (authorId === userId) {
+    return null;
+  }
   obj = jsonfile.readFileSync(file);
   if (coolDownUsers.includes(authorId)) {
     return null;
@@ -112,20 +115,24 @@ function vote(type, userId, authorId) {
   }
 }
 
+async function getUserIdFromMsg(msg) {
+  const lastMsg = await msg.channel.getMessages(2, msg.id);
+  return lastMsg[0].author.id;
+}
+
 let coolDownUsers = [];
 bot.registerCommand(
   "upvote",
   async (msg, args) => {
-    // read from file
-
-    // Make an echo command
+    let userId;
     if (args.length === 0) {
-      // If the user just typed "!echo", say "Invalid input"
-      return "Invalid input";
+      userId = await getUserIdFromMsg(msg);
+    } else {
+      const mention = args[0];
+      userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
     }
     const guild = msg.channel.guild;
-    const mention = args[0];
-    const userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
+
     const member = guild.members.get(userId);
     const userIsInGuild = !!member;
     if (!userIsInGuild) {
@@ -135,11 +142,12 @@ bot.registerCommand(
     if (result === null) {
       return "fuck off";
     }
-    return `An upvote? Very cool. ${mention}'s score is now ${result}`;
+    return `An upvote? Very cool. ${member.username}'s score is now ${result}`;
   },
   {
     description: "Upvotes a user",
-    fullDescription: "Upvotes a user by their username",
+    fullDescription:
+      "Upvotes a user by their username. If a username is not given, the last user to send a message gets an upvote",
     usage: "<mention>"
   }
 );
@@ -147,13 +155,15 @@ bot.registerCommand(
 bot.registerCommand(
   "downvote",
   async (msg, args) => {
+    let userId;
     if (args.length === 0) {
-      // If the user just typed "!echo", say "Invalid input"
-      return "Invalid input";
+      userId = await getUserIdFromMsg(msg);
+    } else {
+      const mention = args[0];
+      userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
     }
     const guild = msg.channel.guild;
     const mention = args[0];
-    const userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
     const member = guild.members.get(userId);
 
     const userIsInGuild = !!member;
@@ -164,12 +174,13 @@ bot.registerCommand(
     if (result === null) {
       return "fuck off";
     }
-    return `Oof ouchie a downvote! ${mention}'s score is now ${result}`;
+    return `Oof ouchie a downvote! ${member.username}'s score is now ${result}`;
   },
   {
     description: "Downvotes a user",
-    fullDescription: "Downvote a user by their username",
-    usage: "<mention>"
+    fullDescription:
+      "Downvote a user by their username. If a username is not given, the last user to send a message gets a downvote",
+    usage: "<[mention]>"
   }
 );
 
