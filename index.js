@@ -115,9 +115,15 @@ function vote(type, userId, authorId) {
   }
 }
 
-async function getUserIdFromMsg(msg) {
-  const lastMsg = await msg.channel.getMessages(2, msg.id);
-  return lastMsg[0].author.id;
+async function getUserIdFromMsg(msg, upvote) {
+  const lastMsgs = await msg.channel.getMessages(2, msg.id);
+  if (upvote) {
+    lastMsgs[0].addReaction("⬆");
+  } else {
+    lastMsgs[0].addReaction("⬇");
+  }
+
+  return lastMsgs[0].author.id;
 }
 
 let coolDownUsers = [];
@@ -126,7 +132,7 @@ bot.registerCommand(
   async (msg, args) => {
     let userId;
     if (args.length === 0) {
-      userId = await getUserIdFromMsg(msg);
+      userId = await getUserIdFromMsg(msg, true);
     } else {
       const mention = args[0];
       userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
@@ -157,7 +163,7 @@ bot.registerCommand(
   async (msg, args) => {
     let userId;
     if (args.length === 0) {
-      userId = await getUserIdFromMsg(msg);
+      userId = await getUserIdFromMsg(msg, false);
     } else {
       const mention = args[0];
       userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
