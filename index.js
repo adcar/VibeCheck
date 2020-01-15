@@ -120,7 +120,12 @@ async function getUserIdFromMsg(msg) {
   const userId = msg.author.id;
   let msgToBeVoted;
   lastMsgs.forEach(msg => {
-    if (msg.author.id !== bot.user.id && msg.author.id !== userId) {
+    if (
+      msg.author.id !== bot.user.id &&
+      msg.author.id !== userId &&
+      !msg.content.includes("!u") &&
+      !msg.content.includes("!d")
+    ) {
       msgToBeVoted = msg;
     }
   });
