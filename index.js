@@ -81,7 +81,7 @@ bot.registerCommand(
     description: "Vibechecks a user",
     fullDescription:
       "Give a username as the first argument and see whether or not they pass the vibecheck.",
-    usage: "<[mention]>"
+    usage: "<mention>"
   }
 );
 
@@ -148,7 +148,7 @@ bot.registerCommand(
     description: "Upvotes a user",
     fullDescription:
       "Upvotes a user by their username. If a username is not given, the last user to send a message gets an upvote",
-    usage: "<mention>"
+    usage: "<[mention]>"
   }
 );
 
