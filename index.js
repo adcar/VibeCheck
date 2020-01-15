@@ -11,6 +11,11 @@ var bot = new Eris.CommandClient(
     prefix: "!"
   }
 );
+function getTimeLeft(timeout) {
+  return Math.ceil(
+    (timeout._idleStart + timeout._idleTimeout) / 1000 - process.uptime()
+  );
+}
 
 bot.on("ready", () => {
   // When the bot is ready
@@ -90,14 +95,25 @@ function vote(type, userId, authorId) {
     return null;
   }
   obj = jsonfile.readFileSync(file);
-  if (coolDownUsers.includes(authorId)) {
-    return null;
+
+  if (coolDownUsers.filter(e => e.userId === authorId).length > 0) {
+    let timeLeftMsg = null;
+    coolDownUsers.forEach(coolDownUser => {
+      if (coolDownUser.userId === authorId) {
+        const timeLeft = getTimeLeft(coolDownUser.timeout);
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft - minutes * 60;
+
+        timeLeftMsg = `You must wait ${minutes}m ${seconds}s before doing that again`;
+      }
+    });
+    return timeLeftMsg;
   } else {
-    coolDownUsers.push(authorId);
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       const index = coolDownUsers.indexOf(authorId);
       if (index !== -1) coolDownUsers.splice(index, 1);
     }, 180000); // 3 minutes
+    coolDownUsers.push({ userId: authorId, timeout: timeout });
   }
   if (!obj[userId]) {
     obj[userId] = 0;
@@ -161,6 +177,9 @@ bot.registerCommand(
     if (result === null) {
       return "fuck off";
     }
+    if (typeof result === "string") {
+      return result;
+    }
     return `An upvote? Very cool. ${member.username}'s score is now ${result}`;
   },
   {
@@ -178,7 +197,7 @@ bot.registerCommand(
     if (args.length === 0) {
       userId = await getUserIdFromMsg(msg);
       if (userId === null) {
-        return msg.channel.createMessage("Couldn't find a message to upvote");
+        return msg.channel.createMessage("Couldn't find a message to downvote");
       }
     } else {
       const mention = args[0];
