@@ -115,7 +115,7 @@ function vote(type, userId, authorId) {
   }
 }
 
-async function getUserIdFromMsg(msg, upvote) {
+async function getUserIdFromMsg(msg) {
   const lastMsgs = await msg.channel.getMessages(100, msg.id);
   const userId = msg.author.id;
   let msgToBeVoted;
@@ -125,12 +125,6 @@ async function getUserIdFromMsg(msg, upvote) {
     }
   });
   if (msgToBeVoted) {
-    if (upvote) {
-      msgToBeVoted.addReaction("⬆");
-    } else {
-      msgToBeVoted.addReaction("⬇");
-    }
-
     return msgToBeVoted.author.id;
   } else {
     return null;
@@ -143,7 +137,7 @@ bot.registerCommand(
   async (msg, args) => {
     let userId;
     if (args.length === 0) {
-      userId = await getUserIdFromMsg(msg, true);
+      userId = await getUserIdFromMsg(msg);
       if (userId === null) {
         return msg.channel.createMessage("Couldn't find a message to upvote");
       }
@@ -177,7 +171,7 @@ bot.registerCommand(
   async (msg, args) => {
     let userId;
     if (args.length === 0) {
-      userId = await getUserIdFromMsg(msg, false);
+      userId = await getUserIdFromMsg(msg);
       if (userId === null) {
         return msg.channel.createMessage("Couldn't find a message to upvote");
       }
