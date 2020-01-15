@@ -180,7 +180,6 @@ bot.registerCommand(
       userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
     }
     const guild = msg.channel.guild;
-    const mention = args[0];
     const member = guild.members.get(userId);
 
     const userIsInGuild = !!member;
