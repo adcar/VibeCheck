@@ -2,6 +2,7 @@ const Eris = require("eris");
 const jsonfile = require("jsonfile");
 const file = "../data.json";
 const vote = require("./vote.js");
+const invalidUserMsg = "Yeah... um sweaty? That's not a valid username. K thx.";
 const bot = new Eris.CommandClient(
   process.env.BOT_TOKEN,
   {},
