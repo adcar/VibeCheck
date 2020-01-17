@@ -2,7 +2,7 @@ const jsonfile = require("jsonfile");
 const file = process.argv[2];
 const vote = require("./vote.js");
 const bot = require("./bot.js");
-const invalidUserMsg = "Yeah... um sweaty? That's not a valid username. K thx.";
+const errorMsgs = require("./errorMsgs");
 
 bot.on("ready", () => {
   // When the bot is ready
@@ -50,10 +50,8 @@ bot.registerCommand(
 bot.registerCommand(
   "vibecheck",
   (msg, args) => {
-    // Make an echo command
     if (args.length === 0) {
-      // If the user just typed "!echo", say "Invalid input"
-      return "Invalid input";
+      return errorMsgs.argumentRequired;
     }
     const guild = msg.channel.guild;
     const mention = args[0];
@@ -62,7 +60,7 @@ bot.registerCommand(
 
     const userIsInGuild = !!member;
     if (!userIsInGuild) {
-      return msg.channel.createMessage(invalidUserMsg);
+      return msg.channel.createMessage(errorMsgs.invalidUserMsg);
     }
 
     if (

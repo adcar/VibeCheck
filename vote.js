@@ -1,7 +1,6 @@
 const { getUserIdFromMsg, getTimeLeft } = require("./utils");
 const jsonfile = require("jsonfile");
-
-const invalidUserMsg = "Yeah... um sweaty? That's not a valid username. K thx.";
+const errorMsgs = require("./errorMsgs");
 //  Array that stores the users that are still being cooled down.
 let coolDownUsers = [];
 
@@ -10,7 +9,7 @@ module.exports = async function(type, msg, args, file) {
   if (args.length === 0) {
     userId = await getUserIdFromMsg(msg);
     if (userId === null) {
-      return msg.channel.createMessage("Couldn't find a message to vote on");
+      return msg.channel.createMessage(errorMsgs.noValidMessageFound);
     }
   } else {
     const mention = args[0];
@@ -21,11 +20,11 @@ module.exports = async function(type, msg, args, file) {
   const member = guild.members.get(userId);
   const userIsInGuild = !!member;
   if (!userIsInGuild) {
-    return msg.channel.createMessage(invalidUserMsg);
+    return msg.channel.createMessage(errorMsgs.invalidUserMsg);
   }
 
   if (msg.author.id === userId) {
-    return "You can't vote on yourself cringe normie";
+    return errorMsgs.noSelfVoting;
   }
 
   // obj is the file that lists the scores of all users.
@@ -40,7 +39,7 @@ module.exports = async function(type, msg, args, file) {
         minutes = Math.floor(timeLeft / 60);
         const seconds = timeLeft - minutes * 60;
 
-        timeLeftMsg = `You must wait ${minutes}m ${seconds}s before doing that again`;
+        timeLeftMsg = errorMsgs.cooldown(minutes, seconds);
       }
     });
 
