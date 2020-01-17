@@ -6,7 +6,7 @@ module.exports = {
     const lastMsgs = await msg.channel.getMessages(100, msg.id);
     const userId = msg.author.id;
     let msgToBeVoted;
-    for (let i = 100; i > 0; i--) {
+    for (let i = 99; i > 0; i--) {
       if (
         lastMsgs[i].author.id !== bot.user.id &&
         lastMsgs[i].author.id !== userId &&
