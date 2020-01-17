@@ -1,6 +1,6 @@
 module.exports = {
   // Returns the userId or null if not found
-  getUserIdFromMsg: async function(msg) {
+  getUserIdFromMsg: async function(msg, bot) {
     const lastMsgs = await msg.channel.getMessages(100, msg.id);
     const userId = msg.author.id;
     let msgToBeVoted;

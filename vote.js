@@ -1,14 +1,14 @@
 const { getUserIdFromMsg, getTimeLeft } = require("./utils");
 const jsonfile = require("jsonfile");
-const file = "../data.json";
+
 const invalidUserMsg = "Yeah... um sweaty? That's not a valid username. K thx.";
 //  Array that stores the users that are still being cooled down.
 let coolDownUsers = [];
 
-module.exports = async function(type, msg, args) {
+module.exports = async function(type, msg, args, file, bot) {
   let userId;
   if (args.length === 0) {
-    userId = await getUserIdFromMsg(msg);
+    userId = await getUserIdFromMsg(msg, bot);
     if (userId === null) {
       return msg.channel.createMessage("Couldn't find a message to vote on");
     }
@@ -43,9 +43,8 @@ module.exports = async function(type, msg, args) {
         timeLeftMsg = `You must wait ${minutes}m ${seconds}s before doing that again`;
       }
     });
-    if (minutes > 0) {
-      return timeLeftMsg;
-    }
+
+    return timeLeftMsg;
   }
   const timeout = setTimeout(() => {
     // If the user is in the coolDownUsers array, remove them from it.

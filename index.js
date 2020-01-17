@@ -1,6 +1,6 @@
 const Eris = require("eris");
 const jsonfile = require("jsonfile");
-const file = "../data.json";
+const file = process.argv[2];
 const vote = require("./vote.js");
 const invalidUserMsg = "Yeah... um sweaty? That's not a valid username. K thx.";
 const bot = new Eris.CommandClient(
@@ -94,7 +94,7 @@ bot.registerCommand(
 bot.registerCommand(
   "upvote",
   async (msg, args) => {
-    return await vote("upvote", msg, args);
+    return await vote("upvote", msg, args, file, bot);
   },
   {
     description: "Upvotes a user",
@@ -107,7 +107,7 @@ bot.registerCommand(
 bot.registerCommand(
   "downvote",
   async (msg, args) => {
-    return await vote("downvote", msg, args);
+    return await vote("downvote", msg, args, file, bot);
   },
   {
     description: "Downvotes a user",
