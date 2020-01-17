@@ -6,16 +6,17 @@ module.exports = {
     const lastMsgs = await msg.channel.getMessages(100, msg.id);
     const userId = msg.author.id;
     let msgToBeVoted;
-    lastMsgs.forEach(msg => {
+    for (let i = 100; i > 0; i--) {
       if (
-        msg.author.id !== bot.user.id &&
-        msg.author.id !== userId &&
-        !msg.content.includes("!u") &&
-        !msg.content.includes("!d")
+        lastMsgs[i].author.id !== bot.user.id &&
+        lastMsgs[i].author.id !== userId &&
+        !lastMsgs[i].content.includes("!u") &&
+        !lastMsgs[i].content.includes("!d")
       ) {
-        msgToBeVoted = msg;
+        msgToBeVoted = lastMsgs[i];
       }
-    });
+    }
+
     if (msgToBeVoted) {
       return msgToBeVoted.author.id;
     } else {
