@@ -5,10 +5,10 @@ const invalidUserMsg = "Yeah... um sweaty? That's not a valid username. K thx.";
 //  Array that stores the users that are still being cooled down.
 let coolDownUsers = [];
 
-module.exports = async function(type, msg, args, file, bot) {
+module.exports = async function(type, msg, args, file) {
   let userId;
   if (args.length === 0) {
-    userId = await getUserIdFromMsg(msg, bot);
+    userId = await getUserIdFromMsg(msg);
     if (userId === null) {
       return msg.channel.createMessage("Couldn't find a message to vote on");
     }

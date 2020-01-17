@@ -1,17 +1,8 @@
-const Eris = require("eris");
 const jsonfile = require("jsonfile");
 const file = process.argv[2];
 const vote = require("./vote.js");
+const bot = require("./bot.js");
 const invalidUserMsg = "Yeah... um sweaty? That's not a valid username. K thx.";
-const bot = new Eris.CommandClient(
-  process.env.BOT_TOKEN,
-  {},
-  {
-    description: "Checks your vibe",
-    owner: "Alexander Cardosi",
-    prefix: "!"
-  }
-);
 
 bot.on("ready", () => {
   // When the bot is ready
