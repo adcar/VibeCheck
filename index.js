@@ -11,6 +11,10 @@ var bot = new Eris.CommandClient(
     prefix: "!"
   }
 );
+// Global array that stores the users that are still being cooled down.
+let coolDownUsers = [];
+
+// Util function for getting time left form a setTimeout
 function getTimeLeft(timeout) {
   return Math.ceil(
     (timeout._idleStart + timeout._idleTimeout) / 1000 - process.uptime()
@@ -90,11 +94,13 @@ bot.registerCommand(
   }
 );
 
-function vote(type, userId, authorId) {
+function vote(type, userId, authorId, username) {
   if (authorId === userId) {
-    return null;
+    return "You can't vote on yourself cringe normie";
   }
-  obj = jsonfile.readFileSync(file);
+
+  // obj is the file that lists the scores of all users.
+  let obj = jsonfile.readFileSync(file);
 
   if (coolDownUsers.filter(e => e.userId === authorId).length > 0) {
     let timeLeftMsg = null;
@@ -110,11 +116,14 @@ function vote(type, userId, authorId) {
     return timeLeftMsg;
   } else {
     const timeout = setTimeout(() => {
+      // If the user is in the coolDownUsers array, remove them from it.
       const index = coolDownUsers.indexOf(authorId);
       if (index !== -1) coolDownUsers.splice(index, 1);
     }, 180000); // 3 minutes
     coolDownUsers.push({ userId: authorId, timeout: timeout });
   }
+
+  // If the user id does not exist in the file, set their score to 0
   if (!obj[userId]) {
     obj[userId] = 0;
   }
@@ -122,15 +131,16 @@ function vote(type, userId, authorId) {
   if (type === "upvote") {
     obj[userId]++;
     jsonfile.writeFileSync(file, obj);
-    return obj[userId];
+    return `Kek. ${username}'s score is now ${obj[userId]}`;
   }
   if (type === "downvote") {
     obj[userId]--;
     jsonfile.writeFileSync(file, obj);
-    return obj[userId];
+    return `Cringe. ${username}'s score is now ${obj[userId]}`;
   }
 }
 
+// Returns the userId or null if not found
 async function getUserIdFromMsg(msg) {
   const lastMsgs = await msg.channel.getMessages(100, msg.id);
   const userId = msg.author.id;
@@ -152,7 +162,6 @@ async function getUserIdFromMsg(msg) {
   }
 }
 
-let coolDownUsers = [];
 bot.registerCommand(
   "upvote",
   async (msg, args) => {
@@ -173,14 +182,13 @@ bot.registerCommand(
     if (!userIsInGuild) {
       return msg.channel.createMessage(invalidUserMsg);
     }
-    const result = await vote("upvote", userId, msg.author.id);
-    if (result === null) {
-      return "fuck off";
-    }
-    if (typeof result === "string") {
-      return result;
-    }
-    return `An upvote? Very cool. ${member.username}'s score is now ${result}`;
+    const resultMsg = await vote(
+      "upvote",
+      userId,
+      msg.author.id,
+      member.username
+    );
+    return resultMsg;
   },
   {
     description: "Upvotes a user",
@@ -210,11 +218,13 @@ bot.registerCommand(
     if (!userIsInGuild) {
       return msg.channel.createMessage(invalidUserMsg);
     }
-    const result = await vote("downvote", userId, msg.author.id);
-    if (result === null) {
-      return "fuck off";
-    }
-    return `Oof ouchie a downvote! ${member.username}'s score is now ${result}`;
+    const resultMsg = await vote(
+      "downvote",
+      userId,
+      msg.author.id,
+      member.username
+    );
+    return resultMsg;
   },
   {
     description: "Downvotes a user",
