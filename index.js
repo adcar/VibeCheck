@@ -30,9 +30,11 @@ bot.registerCommandAlias("halp", "help"); // Alias !halp to !help
 
 bot.registerCommand(
   "score",
-  (msg, args) => {
+  msg => {
     const guild = msg.channel.guild;
-    obj = jsonfile.readFileSync(file);
+
+    // Score file
+    let obj = jsonfile.readFileSync(file);
 
     // Convert object into an array then sort it
     const sortedArr = Object.entries(obj).sort((a, b) => b[1] - a[1]);
@@ -80,7 +82,10 @@ bot.registerCommand(
       return msg.channel.createMessage(invalidUserMsg);
     }
 
-    if (Math.round(Math.random()) == 1 && mention !== "<@194997493078032384>") {
+    if (
+      Math.round(Math.random()) === 1 &&
+      mention !== "<@194997493078032384>"
+    ) {
       return `${mention} passed the vibecheck`;
     } else {
       return `${mention} has failed the vibecheck`;
@@ -94,18 +99,36 @@ bot.registerCommand(
   }
 );
 
-function vote(type, userId, authorId, username) {
-  if (authorId === userId) {
+async function vote(type, msg, args) {
+  let userId;
+  if (args.length === 0) {
+    userId = await getUserIdFromMsg(msg);
+    if (userId === null) {
+      return msg.channel.createMessage("Couldn't find a message to vote on");
+    }
+  } else {
+    const mention = args[0];
+    userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
+  }
+  const guild = msg.channel.guild;
+
+  const member = guild.members.get(userId);
+  const userIsInGuild = !!member;
+  if (!userIsInGuild) {
+    return msg.channel.createMessage(invalidUserMsg);
+  }
+
+  if (msg.author.id === userId) {
     return "You can't vote on yourself cringe normie";
   }
 
   // obj is the file that lists the scores of all users.
   let obj = jsonfile.readFileSync(file);
 
-  if (coolDownUsers.filter(e => e.userId === authorId).length > 0) {
+  if (coolDownUsers.filter(e => e.userId === msg.author.id).length > 0) {
     let timeLeftMsg = null;
     coolDownUsers.forEach(coolDownUser => {
-      if (coolDownUser.userId === authorId) {
+      if (coolDownUser.userId === msg.author.id) {
         const timeLeft = getTimeLeft(coolDownUser.timeout);
         const minutes = Math.floor(timeLeft / 60);
         const seconds = timeLeft - minutes * 60;
@@ -117,10 +140,10 @@ function vote(type, userId, authorId, username) {
   } else {
     const timeout = setTimeout(() => {
       // If the user is in the coolDownUsers array, remove them from it.
-      const index = coolDownUsers.indexOf(authorId);
+      const index = coolDownUsers.indexOf(msg.author.id);
       if (index !== -1) coolDownUsers.splice(index, 1);
     }, 180000); // 3 minutes
-    coolDownUsers.push({ userId: authorId, timeout: timeout });
+    coolDownUsers.push({ userId: msg.author.id, timeout: timeout });
   }
 
   // If the user id does not exist in the file, set their score to 0
@@ -131,12 +154,12 @@ function vote(type, userId, authorId, username) {
   if (type === "upvote") {
     obj[userId]++;
     jsonfile.writeFileSync(file, obj);
-    return `Kek. ${username}'s score is now ${obj[userId]}`;
+    return `Kek. ${member.username}'s score is now ${obj[userId]}`;
   }
   if (type === "downvote") {
     obj[userId]--;
     jsonfile.writeFileSync(file, obj);
-    return `Cringe. ${username}'s score is now ${obj[userId]}`;
+    return `Cringe. ${member.username}'s score is now ${obj[userId]}`;
   }
 }
 
@@ -165,30 +188,7 @@ async function getUserIdFromMsg(msg) {
 bot.registerCommand(
   "upvote",
   async (msg, args) => {
-    let userId;
-    if (args.length === 0) {
-      userId = await getUserIdFromMsg(msg);
-      if (userId === null) {
-        return msg.channel.createMessage("Couldn't find a message to upvote");
-      }
-    } else {
-      const mention = args[0];
-      userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
-    }
-    const guild = msg.channel.guild;
-
-    const member = guild.members.get(userId);
-    const userIsInGuild = !!member;
-    if (!userIsInGuild) {
-      return msg.channel.createMessage(invalidUserMsg);
-    }
-    const resultMsg = await vote(
-      "upvote",
-      userId,
-      msg.author.id,
-      member.username
-    );
-    return resultMsg;
+    return await vote("upvote", msg, args);
   },
   {
     description: "Upvotes a user",
@@ -201,30 +201,7 @@ bot.registerCommand(
 bot.registerCommand(
   "downvote",
   async (msg, args) => {
-    let userId;
-    if (args.length === 0) {
-      userId = await getUserIdFromMsg(msg);
-      if (userId === null) {
-        return msg.channel.createMessage("Couldn't find a message to downvote");
-      }
-    } else {
-      const mention = args[0];
-      userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
-    }
-    const guild = msg.channel.guild;
-    const member = guild.members.get(userId);
-
-    const userIsInGuild = !!member;
-    if (!userIsInGuild) {
-      return msg.channel.createMessage(invalidUserMsg);
-    }
-    const resultMsg = await vote(
-      "downvote",
-      userId,
-      msg.author.id,
-      member.username
-    );
-    return resultMsg;
+    return await vote("downvote", msg, args);
   },
   {
     description: "Downvotes a user",
