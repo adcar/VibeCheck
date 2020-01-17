@@ -2,7 +2,8 @@ const Eris = require("eris");
 const jsonfile = require("jsonfile");
 const invalidUserMsg = "Yeah... um sweaty? That's not a valid username. K thx.";
 const file = "../data.json";
-var bot = new Eris.CommandClient(
+const { getUserIdFromMsg, getTimeLeft } = require("./utils");
+const bot = new Eris.CommandClient(
   process.env.BOT_TOKEN,
   {},
   {
@@ -13,13 +14,6 @@ var bot = new Eris.CommandClient(
 );
 // Global array that stores the users that are still being cooled down.
 let coolDownUsers = [];
-
-// Util function for getting time left form a setTimeout
-function getTimeLeft(timeout) {
-  return Math.ceil(
-    (timeout._idleStart + timeout._idleTimeout) / 1000 - process.uptime()
-  );
-}
 
 bot.on("ready", () => {
   // When the bot is ready
@@ -160,28 +154,6 @@ async function vote(type, msg, args) {
     obj[userId]--;
     jsonfile.writeFileSync(file, obj);
     return `Cringe. ${member.username}'s score is now ${obj[userId]}`;
-  }
-}
-
-// Returns the userId or null if not found
-async function getUserIdFromMsg(msg) {
-  const lastMsgs = await msg.channel.getMessages(100, msg.id);
-  const userId = msg.author.id;
-  let msgToBeVoted;
-  lastMsgs.forEach(msg => {
-    if (
-      msg.author.id !== bot.user.id &&
-      msg.author.id !== userId &&
-      !msg.content.includes("!u") &&
-      !msg.content.includes("!d")
-    ) {
-      msgToBeVoted = msg;
-    }
-  });
-  if (msgToBeVoted) {
-    return msgToBeVoted.author.id;
-  } else {
-    return null;
   }
 }
 
