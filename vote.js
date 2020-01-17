@@ -47,7 +47,11 @@ module.exports = async function(type, msg, args) {
     const timeout = setTimeout(() => {
       // If the user is in the coolDownUsers array, remove them from it.
       const index = coolDownUsers.indexOf(msg.author.id);
-      if (index !== -1) coolDownUsers.splice(index, 1);
+      if (index !== -1) {
+        coolDownUsers.splice(index, 1);
+      } else {
+        console.error("Couldn't find the user in the coolDownUsers array");
+      }
     }, 180000); // 3 minutes
     coolDownUsers.push({ userId: msg.author.id, timeout: timeout });
   }
