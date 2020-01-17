@@ -9,7 +9,7 @@ module.exports = async function(type, msg, args, file) {
   if (args.length === 0) {
     userId = await getUserIdFromMsg(msg);
     if (userId === null) {
-      return msg.channel.createMessage(errorMsgs.noValidMessageFound);
+      return errorMsgs.noValidMessageFound;
     }
   } else {
     const mention = args[0];
@@ -20,7 +20,7 @@ module.exports = async function(type, msg, args, file) {
   const member = guild.members.get(userId);
   const userIsInGuild = !!member;
   if (!userIsInGuild) {
-    return msg.channel.createMessage(errorMsgs.invalidUserMsg);
+    return errorMsgs.invalidUserMsg;
   }
 
   if (msg.author.id === userId) {
