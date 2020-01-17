@@ -33,28 +33,26 @@ module.exports = async function(type, msg, args) {
 
   if (coolDownUsers.filter(e => e.userId === msg.author.id).length > 0) {
     let timeLeftMsg = null;
+    let minutes;
     coolDownUsers.forEach(coolDownUser => {
       if (coolDownUser.userId === msg.author.id) {
         const timeLeft = getTimeLeft(coolDownUser.timeout);
-        const minutes = Math.floor(timeLeft / 60);
+        minutes = Math.floor(timeLeft / 60);
         const seconds = timeLeft - minutes * 60;
 
         timeLeftMsg = `You must wait ${minutes}m ${seconds}s before doing that again`;
       }
     });
-    return timeLeftMsg;
-  } else {
-    const timeout = setTimeout(() => {
-      // If the user is in the coolDownUsers array, remove them from it.
-      const index = coolDownUsers.indexOf(msg.author.id);
-      if (index !== -1) {
-        coolDownUsers.splice(index, 1);
-      } else {
-        console.error("Couldn't find the user in the coolDownUsers array");
-      }
-    }, 180000); // 3 minutes
-    coolDownUsers.push({ userId: msg.author.id, timeout: timeout });
+    if (minutes > 0) {
+      return timeLeftMsg;
+    }
   }
+  const timeout = setTimeout(() => {
+    // If the user is in the coolDownUsers array, remove them from it.
+
+    coolDownUsers = coolDownUsers.filter(e => e.userId !== msg.author.id);
+  }, 180000); // 3 minutes
+  coolDownUsers.push({ userId: msg.author.id, timeout: timeout });
 
   // If the user id does not exist in the file, set their score to 0
   if (!obj[userId]) {
