@@ -14,7 +14,7 @@ module.exports = {
         !lastMsgs[i].content.includes("!d")
       ) {
         msgToBeVoted = lastMsgs[i];
-        console.log("Voted: " msgToBeVoted.content);
+        console.log("Voted: " + msgToBeVoted.content);
       }
     }
 
