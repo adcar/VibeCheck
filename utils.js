@@ -11,11 +11,12 @@ module.exports = {
         lastMsgs[i].author.id !== bot.user.id &&
         lastMsgs[i].author.id !== userId &&
         !lastMsgs[i].content.includes("!u") &&
-        !lastMsgs[i].content.includes("!d")
+        !lastMsgs[i].content.includes("!d") &&
+        !lastMsgs[i].content.includes("!gold")
       ) {
         msgToBeVoted = lastMsgs[i];
         console.log("Voted: " + msgToBeVoted.content);
-	break;
+        break;
       }
     }
 
@@ -30,5 +31,5 @@ module.exports = {
     return Math.ceil(
       (timeout._idleStart + timeout._idleTimeout) / 1000 - process.uptime()
     );
-  }
+  },
 };

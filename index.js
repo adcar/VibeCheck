@@ -13,7 +13,7 @@ bot.registerCommandAlias("halp", "help"); // Alias !halp to !help
 
 bot.registerCommand(
   "score",
-  msg => {
+  (msg) => {
     const guild = msg.channel.guild;
 
     // Score file
@@ -24,7 +24,7 @@ bot.registerCommand(
 
     // Convert the array back into an object called objSorted
     let objSorted = {};
-    sortedArr.forEach(function(item) {
+    sortedArr.forEach(function (item) {
       objSorted[item[0]] = item[1];
     });
 
@@ -43,7 +43,7 @@ bot.registerCommand(
   },
   {
     description: "Karma score of every user",
-    fullDescription: "Displays all karma scores for every user"
+    fullDescription: "Displays all karma scores for every user",
   }
 );
 
@@ -76,37 +76,50 @@ bot.registerCommand(
     description: "Vibechecks a user",
     fullDescription:
       "Give a username as the first argument and see whether or not they pass the vibecheck.",
-    usage: "<mention>"
+    usage: "<mention>",
   }
 );
 
 bot.registerCommand(
   "upvote",
   async (msg, args) => {
-    return await vote("upvote", msg, args, file, bot);
+    return await vote("upvote", msg, args, file);
   },
   {
     description: "Upvotes a user",
     fullDescription:
       "Upvotes a user by their username. If a username is not given, the last user to send a message gets an upvote",
-    usage: "<[mention]>"
+    usage: "<[mention]>",
   }
 );
 
 bot.registerCommand(
   "downvote",
   async (msg, args) => {
-    return await vote("downvote", msg, args, file, bot);
+    return await vote("downvote", msg, args, file);
   },
   {
     description: "Downvotes a user",
     fullDescription:
       "Downvote a user by their username. If a username is not given, the last user to send a message gets a downvote",
-    usage: "<[mention]>"
+    usage: "<[mention]>",
   }
 );
 
 bot.registerCommandAlias("u", "upvote");
 bot.registerCommandAlias("d", "downvote");
+
+bot.registerCommand(
+  "gold",
+  async (msg, args) => {
+    return await vote("upvote", msg, args, file, "gold");
+  },
+  {
+    description: "Gilds a user with g-g-gold!",
+    fullDescription:
+      "Guild a user by their username. If a username is not given, the last user to send a message gets the medal",
+    usage: "<[mention]>",
+  }
+);
 
 bot.connect();

@@ -2,9 +2,18 @@ const { getUserIdFromMsg, getTimeLeft } = require("./utils");
 const jsonfile = require("jsonfile");
 const errorMsgs = require("./errorMsgs");
 //  Array that stores the users that are still being cooled down.
-let coolDownUsers = [];
+let noneCoolDownUsers = [];
+let goldCoolDownUsers = [];
 
-module.exports = async function(type, msg, args, file) {
+const DAY_IN_MS = 86400000;
+const MINUTE_IN_MS = 60000;
+
+const goldCoolDownTime = DAY_IN_MS;
+const noneCoolDownTime = MINUTE_IN_MS * 3;
+
+module.exports = async function (type, msg, args, file, medal = "none") {
+  let coolDownTime;
+
   let userId;
   if (args.length === 0) {
     userId = await getUserIdFromMsg(msg);
@@ -30,27 +39,57 @@ module.exports = async function(type, msg, args, file) {
   // obj is the file that lists the scores of all users.
   let obj = jsonfile.readFileSync(file);
 
-  if (coolDownUsers.filter(e => e.userId === msg.author.id).length > 0) {
-    let timeLeftMsg = null;
-    let minutes;
-    coolDownUsers.forEach(coolDownUser => {
-      if (coolDownUser.userId === msg.author.id) {
-        const timeLeft = getTimeLeft(coolDownUser.timeout);
-        minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft - minutes * 60;
+  // If the user is found in the timeout list, just return the error message
 
-        timeLeftMsg = errorMsgs.cooldown(minutes, seconds);
-      }
-    });
+  if (medal === "none") {
+    if (
+      noneCoolDownUsers.filter((e) => e.userId === msg.author.id).length > 0
+    ) {
+      let timeLeftMsg;
+      noneCoolDownUsers.forEach((coolDownUser) => {
+        if (coolDownUser.userId === msg.author.id) {
+          const timeLeft = getTimeLeft(coolDownUser.timeout);
+          timeLeftMsg = errorMsgs.cooldown(timeLeft);
+        }
+      });
 
-    return timeLeftMsg;
+      return timeLeftMsg;
+    }
+  } else if (medal === "gold") {
+    if (
+      goldCoolDownUsers.filter((e) => e.userId === msg.author.id).length > 0
+    ) {
+      let timeLeftMsg;
+      goldCoolDownUsers.forEach((coolDownUser) => {
+        if (coolDownUser.userId === msg.author.id) {
+          const timeLeft = getTimeLeft(coolDownUser.timeout);
+          timeLeftMsg = errorMsgs.cooldown(timeLeft);
+        }
+      });
+
+      return timeLeftMsg;
+    }
   }
-  const timeout = setTimeout(() => {
-    // If the user is in the coolDownUsers array, remove them from it.
 
-    coolDownUsers = coolDownUsers.filter(e => e.userId !== msg.author.id);
-  }, 180000); // 3 minutes
-  coolDownUsers.push({ userId: msg.author.id, timeout: timeout });
+  if (medal === "none") {
+    const timeout = setTimeout(() => {
+      // If the user is in the coolDownUsers array, remove them from it.
+
+      noneCoolDownUsers = noneCoolDownUsers.filter(
+        (e) => e.userId !== msg.author.id
+      );
+    }, noneCoolDownTime); // 3 minutes
+    noneCoolDownUsers.push({ userId: msg.author.id, timeout: timeout });
+  } else if (medal === "gold") {
+    const timeout = setTimeout(() => {
+      // If the user is in the coolDownUsers array, remove them from it.
+
+      goldCoolDownUsers = goldCoolDownUsers.filter(
+        (e) => e.userId !== msg.author.id
+      );
+    }, goldCoolDownTime); // 1 day
+    goldCoolDownUsers.push({ userId: msg.author.id, timeout: timeout });
+  }
 
   // If the user id does not exist in the file, set their score to 0
   if (!obj[userId]) {
@@ -58,10 +97,18 @@ module.exports = async function(type, msg, args, file) {
   }
 
   if (type === "upvote") {
-    obj[userId]++;
-    jsonfile.writeFileSync(file, obj);
-    return `Kek. ${member.username}'s score is now ${obj[userId]}`;
+    if (medal === "none") {
+      obj[userId]++;
+      jsonfile.writeFileSync(file, obj);
+      return `Kek. ${member.username}'s score is now ${obj[userId]}`;
+    }
+    if (medal === "gold") {
+      obj[userId] += 10;
+      jsonfile.writeFileSync(file, obj);
+      return `Thanks for the gold kind stranger! ${member.username}'s score is now ${obj[userId]}`;
+    }
   }
+
   if (type === "downvote") {
     obj[userId]--;
     jsonfile.writeFileSync(file, obj);
