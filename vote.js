@@ -14,7 +14,6 @@ const platCoolDownTime = DAY_IN_MS * 30;
 const noneCoolDownTime = MINUTE_IN_MS * 3;
 
 module.exports = async function (type, msg, args, file, medal = "none") {
-
   let userId;
   if (args.length === 0) {
     userId = await getUserIdFromMsg(msg);
@@ -71,7 +70,7 @@ module.exports = async function (type, msg, args, file, medal = "none") {
       return timeLeftMsg;
     }
   } else if (medal === "plat") {
-        if (
+    if (
       platCoolDownUsers.filter((e) => e.userId === msg.author.id).length > 0
     ) {
       let timeLeftMsg;
@@ -83,6 +82,7 @@ module.exports = async function (type, msg, args, file, medal = "none") {
       });
 
       return timeLeftMsg;
+    }
   }
 
   if (medal === "none") {
@@ -104,14 +104,14 @@ module.exports = async function (type, msg, args, file, medal = "none") {
     }, goldCoolDownTime); // 1 day
     goldCoolDownUsers.push({ userId: msg.author.id, timeout: timeout });
   } else if (medal === "plat") {
-        const timeout = setTimeout(() => {
+    const timeout = setTimeout(() => {
       // If the user is in the coolDownUsers array, remove them from it.
 
       platCoolDownUsers = platCoolDownUsers.filter(
         (e) => e.userId !== msg.author.id
       );
     }, platCoolDownTime); // 30 days
-     platCoolDownUsers.push({ userId: msg.author.id, timeout: timeout });
+    platCoolDownUsers.push({ userId: msg.author.id, timeout: timeout });
   }
 
   // If the user id does not exist in the file, set their score to 0
@@ -139,7 +139,6 @@ module.exports = async function (type, msg, args, file, medal = "none") {
       ${member.username}'s score is now ${obj[userId]}`;
     }
   }
-
   if (type === "downvote") {
     obj[userId]--;
     jsonfile.writeFileSync(file, obj);
