@@ -122,4 +122,17 @@ bot.registerCommand(
   }
 );
 
+bot.registerCommand(
+  "plat",
+  async (msg, args) => {
+    return await vote("upvote", msg, args, file, "plat");
+  },
+  {
+    description: "Oh my... is that... plat???!?!?!?!?",
+    fullDescription:
+      "Guild a user by their username. If a username is not given, the last user to send a message gets the medal",
+    usage: "<[mention]>",
+  }
+);
+
 bot.connect();

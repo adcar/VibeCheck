@@ -12,7 +12,8 @@ module.exports = {
         lastMsgs[i].author.id !== userId &&
         !lastMsgs[i].content.includes("!u") &&
         !lastMsgs[i].content.includes("!d") &&
-        !lastMsgs[i].content.includes("!gold")
+        !lastMsgs[i].content.includes("!gold") &&
+        !lastMsgs[i].content.includes("!plat")
       ) {
         msgToBeVoted = lastMsgs[i];
         console.log("Voted: " + msgToBeVoted.content);

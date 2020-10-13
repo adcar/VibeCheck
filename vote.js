@@ -4,15 +4,16 @@ const errorMsgs = require("./errorMsgs");
 //  Array that stores the users that are still being cooled down.
 let noneCoolDownUsers = [];
 let goldCoolDownUsers = [];
+let platCoolDownUsers = [];
 
 const DAY_IN_MS = 86400000;
 const MINUTE_IN_MS = 60000;
 
 const goldCoolDownTime = DAY_IN_MS;
+const platCoolDownTime = DAY_IN_MS * 30;
 const noneCoolDownTime = MINUTE_IN_MS * 3;
 
 module.exports = async function (type, msg, args, file, medal = "none") {
-  let coolDownTime;
 
   let userId;
   if (args.length === 0) {
@@ -40,7 +41,7 @@ module.exports = async function (type, msg, args, file, medal = "none") {
   let obj = jsonfile.readFileSync(file);
 
   // If the user is found in the timeout list, just return the error message
-
+  // TODO: Refactor this horrible, horrible, terrible, disgusting code (just make a function that takes an array argument)
   if (medal === "none") {
     if (
       noneCoolDownUsers.filter((e) => e.userId === msg.author.id).length > 0
@@ -69,6 +70,19 @@ module.exports = async function (type, msg, args, file, medal = "none") {
 
       return timeLeftMsg;
     }
+  } else if (medal === "plat") {
+        if (
+      platCoolDownUsers.filter((e) => e.userId === msg.author.id).length > 0
+    ) {
+      let timeLeftMsg;
+      platCoolDownUsers.forEach((coolDownUser) => {
+        if (coolDownUser.userId === msg.author.id) {
+          const timeLeft = getTimeLeft(coolDownUser.timeout);
+          timeLeftMsg = errorMsgs.cooldown(timeLeft);
+        }
+      });
+
+      return timeLeftMsg;
   }
 
   if (medal === "none") {
@@ -89,6 +103,15 @@ module.exports = async function (type, msg, args, file, medal = "none") {
       );
     }, goldCoolDownTime); // 1 day
     goldCoolDownUsers.push({ userId: msg.author.id, timeout: timeout });
+  } else if (medal === "plat") {
+        const timeout = setTimeout(() => {
+      // If the user is in the coolDownUsers array, remove them from it.
+
+      platCoolDownUsers = platCoolDownUsers.filter(
+        (e) => e.userId !== msg.author.id
+      );
+    }, platCoolDownTime); // 30 days
+     platCoolDownUsers.push({ userId: msg.author.id, timeout: timeout });
   }
 
   // If the user id does not exist in the file, set their score to 0
@@ -106,6 +129,14 @@ module.exports = async function (type, msg, args, file, medal = "none") {
       obj[userId] += 10;
       jsonfile.writeFileSync(file, obj);
       return `Thanks for the gold kind stranger! ${member.username}'s score is now ${obj[userId]}`;
+    }
+
+    if (medal === "plat") {
+      obj[userId] += 10;
+      jsonfile.writeFileSync(file, obj);
+      return `OMG!!! YESSSS YESSSSSSSSS THANK YOU SO FUCKING MUCH FOR THE PLAT HOLY SHIT I CAN'T BELIEVE THIS IS HAPPENING YASSSSSS!!!1111 
+      
+      ${member.username}'s score is now ${obj[userId]}`;
     }
   }
 
