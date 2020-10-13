@@ -132,7 +132,7 @@ module.exports = async function (type, msg, args, file, medal = "none") {
     }
 
     if (medal === "plat") {
-      obj[userId] += 10;
+      obj[userId] += 500;
       jsonfile.writeFileSync(file, obj);
       return `OMG!!! YESSSS YESSSSSSSSS THANK YOU SO FUCKING MUCH FOR THE PLAT HOLY SHIT I CAN'T BELIEVE THIS IS HAPPENING YASSSSSS!!!1111 
       
