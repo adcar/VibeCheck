@@ -10,7 +10,7 @@ const DAY_IN_MS = 86400000;
 const MINUTE_IN_MS = 60000;
 
 const goldCoolDownTime = DAY_IN_MS;
-const platCoolDownTime = DAY_IN_MS * 30;
+const platCoolDownTime = 2147483647;
 const noneCoolDownTime = MINUTE_IN_MS * 3;
 
 module.exports = async function (type, msg, args, file, medal = "none") {
@@ -134,9 +134,7 @@ module.exports = async function (type, msg, args, file, medal = "none") {
     if (medal === "plat") {
       obj[userId] += 500;
       jsonfile.writeFileSync(file, obj);
-      return `OMG!!! YESSSS YESSSSSSSSS THANK YOU SO FUCKING MUCH FOR THE PLAT HOLY SHIT I CAN'T BELIEVE THIS IS HAPPENING YASSSSSS!!!1111 
-      
-      ${member.username}'s score is now ${obj[userId]}`;
+      return `OMG!!! YESSSS YESSSSSSSSS THANK YOU SO FUCKING MUCH FOR THE PLAT HOLY SHIT I CAN'T BELIEVE THIS IS HAPPENING YASSSSSS!!!1111 ${member.username}'s score is now ${obj[userId]}`;
     }
   }
   if (type === "downvote") {
