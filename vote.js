@@ -11,7 +11,7 @@ const MINUTE_IN_MS = 60000;
 
 const goldCoolDownTime = DAY_IN_MS;
 const platCoolDownTime = 2147483647;
-const noneCoolDownTime = MINUTE_IN_MS * 3;
+const noneCoolDownTime = MINUTE_IN_MS/2;
 
 module.exports = async function (type, msg, args, file, medal = "none") {
   let userId;

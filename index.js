@@ -33,7 +33,7 @@ bot.registerCommand(
 
     for (let key in objSorted) {
       const member = guild.members.get(key);
-      let username = "<Not a user>";
+      let username = "Cringewalker";
       if (member !== undefined) {
         username = member.username;
       }
