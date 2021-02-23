@@ -5,7 +5,8 @@ const bot = new Eris.CommandClient(
   {
     description: "Checks your vibe",
     owner: "Bruh",
-    prefix: "!"
+    prefix: "!",
+    restMode: true
   }
 );
 

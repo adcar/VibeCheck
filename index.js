@@ -31,18 +31,27 @@ bot.registerCommand(
     // Create a template literal that will contain the score messages
     let score = ``;
 
-    for (let key in objSorted) {
-      const member = guild.members.get(key);
-      let username = "";
-      if (member !== undefined) {
-        username = member.username;
-      }
+    const userIDs = [];
 
-      if (username !== "") {
-	  score += `\n${username}'s score is ${obj[key]}`;
-      }
+
+    // make a list of userIDs to fetch later
+    for (let key in objSorted) {
+      userIDs.push(key);
     }
-    return score;
+
+    return guild.fetchMembers({userIDs}).then(members => {
+
+      members.forEach((member) => {
+        console.log(objSorted[member.id]);
+        score += `\n${member.user.username}'s score is ${objSorted[member.id]}`;
+    
+      })
+
+      return score;
+
+    })
+    
+  
   },
   {
     description: "Karma score of every user",
