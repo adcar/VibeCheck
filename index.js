@@ -40,9 +40,8 @@ bot.registerCommand(
     }
 
     return guild.fetchMembers({userIDs}).then(members => {
-
+      members.sort((a, b,) => (objSorted[b.id] > objSorted[a.id]) ? 1 : -1);
       members.forEach((member) => {
-        console.log(objSorted[member.id]);
         score += `\n${member.user.username}'s score is ${objSorted[member.id]}`;
     
       })
