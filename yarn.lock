@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"ascii-table@^0.0.9":
+  "integrity" "sha1-BqZgTWpV1L9BqaR9mHLXp42jHnM="
+  "resolved" "https://registry.npmjs.org/ascii-table/-/ascii-table-0.0.9.tgz"
+  "version" "0.0.9"
+
 "eris@^0.14.0":
   "integrity" "sha512-/W6X0SFR2swtA9oc4ga5Wh1TQcZtPgbUaDDdwYc67fvFUAtwC+V1xzWUZq2yDeJnTfB8Uot9SJWA8Lthe2sDtQ=="
   "resolved" "https://registry.npmjs.org/eris/-/eris-0.14.0.tgz"

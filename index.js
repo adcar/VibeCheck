@@ -1,4 +1,5 @@
 const jsonfile = require("jsonfile");
+const AsciiTable = require('ascii-table')
 const file = process.argv[2];
 const vote = require("./vote.js");
 const bot = require("./bot.js");
@@ -17,36 +18,38 @@ bot.registerCommand(
     const guild = msg.channel.guild;
 
     // Score file
-    let obj = jsonfile.readFileSync(file);
+    let scores = jsonfile.readFileSync(file);
 
-    // Convert object into an array then sort it
-    const sortedArr = Object.entries(obj).sort((a, b) => b[1] - a[1]);
 
-    // Convert the array back into an object called objSorted
-    let objSorted = {};
-    sortedArr.forEach(function (item) {
-      objSorted[item[0]] = item[1];
-    });
-
-    // Create a template literal that will contain the score messages
-    let score = ``;
+    const table = new AsciiTable()
+    table
+      .setHeading("Rank", "Username", "Score")
 
     const userIDs = [];
 
 
     // make a list of userIDs to fetch later
-    for (let key in objSorted) {
+    for (let key in scores) {
       userIDs.push(key);
     }
 
     return guild.fetchMembers({userIDs}).then(members => {
-      members.sort((a, b,) => (objSorted[b.id] > objSorted[a.id]) ? 1 : -1);
-      members.forEach((member) => {
-        score += `\n${member.user.username}'s score is ${objSorted[member.id]}`;
+      members.sort((a, b,) => (scores[b.id] > scores[a.id]) ? 1 : -1);
+      members.forEach((member, index) => {
+        console.log(member);
+        const score = scores[member.id];
+        let formattedScore;
+        if (score < 0) {
+          formattedScore =  AsciiTable.alignCenter(scores[member.id], 5)
+        } else {
+          formattedScore =  AsciiTable.alignCenter(scores[member.id], 6)
+        }
+        table.addRow(AsciiTable.alignCenter(index + 1, 5), member.user.username, formattedScore)
     
       })
 
-      return score;
+      return "```\n" + table.toString() + "```";
+
 
     })
     
