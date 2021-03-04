@@ -126,13 +126,13 @@ module.exports = async function (type, msg, args, file, medal = "none") {
       return `Kek. ${member.username}'s score is now ${obj[userId]}`;
     }
     if (medal === "gold") {
-      obj[userId] += 50;
+      obj[userId] += 10;
       jsonfile.writeFileSync(file, obj);
       return `Thanks for the gold kind stranger! ${member.username}'s score is now ${obj[userId]}`;
     }
 
     if (medal === "plat") {
-      obj[userId] += 500;
+      obj[userId] += 50;
       jsonfile.writeFileSync(file, obj);
       return `OMG!!! YESSSS YESSSSSSSSS THANK YOU SO FUCKING MUCH FOR THE PLAT HOLY SHIT I CAN'T BELIEVE THIS IS HAPPENING YASSSSSS!!!1111 ${member.username}'s score is now ${obj[userId]}`;
     }
