@@ -1,9 +1,10 @@
 const jsonfile = require("jsonfile");
-const AsciiTable = require('ascii-table')
+const AsciiTable = require("ascii-table");
 const file = process.argv[2];
 const vote = require("./vote.js");
 const bot = require("./bot.js");
 const errorMsgs = require("./errorMsgs");
+const { banish } = require("awesome-zalgo");
 
 bot.on("ready", () => {
   // When the bot is ready
@@ -20,40 +21,36 @@ bot.registerCommand(
     // Score file
     let scores = jsonfile.readFileSync(file);
 
-
-    const table = new AsciiTable()
-    table
-      .setHeading("Rank", "Username", "Score")
+    const table = new AsciiTable();
+    table.setHeading("Rank", "Username", "Score");
 
     const userIDs = [];
-
 
     // make a list of userIDs to fetch later
     for (let key in scores) {
       userIDs.push(key);
     }
 
-    return guild.fetchMembers({userIDs}).then(members => {
-      members.sort((a, b,) => (scores[b.id] > scores[a.id]) ? 1 : -1);
+    return guild.fetchMembers({ userIDs }).then((members) => {
+      members.sort((a, b) => (scores[b.id] > scores[a.id] ? 1 : -1));
       members.forEach((member, index) => {
         console.log(member);
         const score = scores[member.id];
         let formattedScore;
         if (score < 0) {
-          formattedScore =  AsciiTable.alignCenter(scores[member.id], 5)
+          formattedScore = AsciiTable.alignCenter(scores[member.id], 5);
         } else {
-          formattedScore =  AsciiTable.alignCenter(scores[member.id], 6)
+          formattedScore = AsciiTable.alignCenter(scores[member.id], 6);
         }
-        table.addRow(AsciiTable.alignCenter(index + 1, 5), member.user.username, formattedScore)
-    
-      })
+        table.addRow(
+          AsciiTable.alignCenter(index + 1, 5),
+          banish(member.user.username),
+          formattedScore
+        );
+      });
 
       return "```\n" + table.toString() + "```";
-
-
-    })
-    
-  
+    });
   },
   {
     description: "Karma score of every user",

@@ -2,63 +2,68 @@
 # yarn lockfile v1
 
 
-"ascii-table@^0.0.9":
-  "integrity" "sha1-BqZgTWpV1L9BqaR9mHLXp42jHnM="
-  "resolved" "https://registry.npmjs.org/ascii-table/-/ascii-table-0.0.9.tgz"
-  "version" "0.0.9"
+"@favware/zalgo@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@favware/zalgo/-/zalgo-3.1.2.tgz#761b81fabe8bc0eea46714d6f38f40026016b736"
+  integrity sha512-CgEHfzXhY3OnHWyKwCktv3Z3eRxqAGPt2VBauIzoDBUiSC5sqNEF+omBQ2sTjHJSsogSrTpmrMjHyytt3t0qmg==
 
-"eris@^0.14.0":
-  "integrity" "sha512-/W6X0SFR2swtA9oc4ga5Wh1TQcZtPgbUaDDdwYc67fvFUAtwC+V1xzWUZq2yDeJnTfB8Uot9SJWA8Lthe2sDtQ=="
-  "resolved" "https://registry.npmjs.org/eris/-/eris-0.14.0.tgz"
-  "version" "0.14.0"
+ascii-table@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.npmjs.org/ascii-table/-/ascii-table-0.0.9.tgz"
+  integrity sha1-BqZgTWpV1L9BqaR9mHLXp42jHnM=
+
+eris@^0.14.0:
+  version "0.14.0"
+  resolved "https://registry.npmjs.org/eris/-/eris-0.14.0.tgz"
+  integrity sha512-/W6X0SFR2swtA9oc4ga5Wh1TQcZtPgbUaDDdwYc67fvFUAtwC+V1xzWUZq2yDeJnTfB8Uot9SJWA8Lthe2sDtQ==
   dependencies:
-    "ws" "^7.2.1"
+    ws "^7.2.1"
   optionalDependencies:
-    "opusscript" "^0.0.7"
-    "tweetnacl" "^1.0.1"
+    opusscript "^0.0.7"
+    tweetnacl "^1.0.1"
 
-"graceful-fs@^4.1.6":
-  "integrity" "sha512-a30VEBm4PEdx1dRB7MFK7BejejvCvBronbLjht+sHuGYj8PHs7M/5Z+rt5lw551vZ7yfTCj4Vuyy3mSJytDWRQ=="
-  "resolved" "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.3.tgz"
-  "version" "4.2.3"
+graceful-fs@^4.1.6:
+  version "4.2.3"
+  resolved "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.3.tgz"
+  integrity sha512-a30VEBm4PEdx1dRB7MFK7BejejvCvBronbLjht+sHuGYj8PHs7M/5Z+rt5lw551vZ7yfTCj4Vuyy3mSJytDWRQ==
 
-"jsonfile@^5.0.0":
-  "integrity" "sha512-NQRZ5CRo74MhMMC3/3r5g2k4fjodJ/wh8MxjFbCViWKFjxrnudWSY5vomh+23ZaXzAS7J3fBZIR2dV6WbmfM0w=="
-  "resolved" "https://registry.npmjs.org/jsonfile/-/jsonfile-5.0.0.tgz"
-  "version" "5.0.0"
+jsonfile@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.npmjs.org/jsonfile/-/jsonfile-5.0.0.tgz"
+  integrity sha512-NQRZ5CRo74MhMMC3/3r5g2k4fjodJ/wh8MxjFbCViWKFjxrnudWSY5vomh+23ZaXzAS7J3fBZIR2dV6WbmfM0w==
   dependencies:
-    "universalify" "^0.1.2"
+    universalify "^0.1.2"
   optionalDependencies:
-    "graceful-fs" "^4.1.6"
+    graceful-fs "^4.1.6"
 
-"opusscript@^0.0.7":
-  "integrity" "sha512-DcBadTdYTUuH9zQtepsLjQn4Ll6rs3dmeFvN+SD0ThPnxRBRm/WC1zXWPg+wgAJimB784gdZvUMA57gDP7FdVg=="
-  "resolved" "https://registry.npmjs.org/opusscript/-/opusscript-0.0.7.tgz"
-  "version" "0.0.7"
+opusscript@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.npmjs.org/opusscript/-/opusscript-0.0.7.tgz"
+  integrity sha512-DcBadTdYTUuH9zQtepsLjQn4Ll6rs3dmeFvN+SD0ThPnxRBRm/WC1zXWPg+wgAJimB784gdZvUMA57gDP7FdVg==
 
-"parse-ms@^2.1.0":
-  "integrity" "sha512-kHt7kzLoS9VBZfUsiKjv43mr91ea+U05EyKkEtqp7vNbHxmaVuEqN7XxeEVnGrMtYOAxGrDElSi96K7EgO1zCA=="
-  "resolved" "https://registry.npmjs.org/parse-ms/-/parse-ms-2.1.0.tgz"
-  "version" "2.1.0"
+parse-ms@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/parse-ms/-/parse-ms-2.1.0.tgz"
+  integrity sha512-kHt7kzLoS9VBZfUsiKjv43mr91ea+U05EyKkEtqp7vNbHxmaVuEqN7XxeEVnGrMtYOAxGrDElSi96K7EgO1zCA==
 
-"pretty-ms@^7.0.0":
-  "integrity" "sha512-973driJZvxiGOQ5ONsFhOF/DtzPMOMtgC11kCpUrPGMTgqp2q/1gwzCquocrN33is0VZ5GFHXZYMM9l6h67v2Q=="
-  "resolved" "https://registry.npmjs.org/pretty-ms/-/pretty-ms-7.0.1.tgz"
-  "version" "7.0.1"
+pretty-ms@^7.0.0:
+  version "7.0.1"
+  resolved "https://registry.npmjs.org/pretty-ms/-/pretty-ms-7.0.1.tgz"
+  integrity sha512-973driJZvxiGOQ5ONsFhOF/DtzPMOMtgC11kCpUrPGMTgqp2q/1gwzCquocrN33is0VZ5GFHXZYMM9l6h67v2Q==
   dependencies:
-    "parse-ms" "^2.1.0"
+    parse-ms "^2.1.0"
 
-"tweetnacl@^1.0.1":
-  "integrity" "sha512-kcoMoKTPYnoeS50tzoqjPY3Uv9axeuuFAZY9M/9zFnhoVvRfxz9K29IMPD7jGmt2c8SW7i3gT9WqDl2+nV7p4A=="
-  "resolved" "https://registry.npmjs.org/tweetnacl/-/tweetnacl-1.0.1.tgz"
-  "version" "1.0.1"
+tweetnacl@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/tweetnacl/-/tweetnacl-1.0.1.tgz"
+  integrity sha512-kcoMoKTPYnoeS50tzoqjPY3Uv9axeuuFAZY9M/9zFnhoVvRfxz9K29IMPD7jGmt2c8SW7i3gT9WqDl2+nV7p4A==
 
-"universalify@^0.1.2":
-  "integrity" "sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg=="
-  "resolved" "https://registry.npmjs.org/universalify/-/universalify-0.1.2.tgz"
-  "version" "0.1.2"
+universalify@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.npmjs.org/universalify/-/universalify-0.1.2.tgz"
+  integrity sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==
 
-"ws@^7.2.1":
-  "integrity" "sha512-hr6vCR76GsossIRsr8OLR9acVVm1jyfEWvhbNjtgPOrfvAlKzvyeg/P6r8RuDjRyrcQoPQT7K0DGEPc7Ae6jzA=="
-  "resolved" "https://registry.npmjs.org/ws/-/ws-7.4.3.tgz"
-  "version" "7.4.3"
+ws@^7.2.1:
+  version "7.4.3"
+  resolved "https://registry.npmjs.org/ws/-/ws-7.4.3.tgz"
+  integrity sha512-hr6vCR76GsossIRsr8OLR9acVVm1jyfEWvhbNjtgPOrfvAlKzvyeg/P6r8RuDjRyrcQoPQT7K0DGEPc7Ae6jzA==

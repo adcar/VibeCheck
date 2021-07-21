@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@favware/zalgo": "^3.1.2",
     "ascii-table": "^0.0.9",
     "eris": "^0.14.0",
     "jsonfile": "^5.0.0",
