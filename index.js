@@ -4,7 +4,7 @@ const file = process.argv[2];
 const vote = require("./vote.js");
 const bot = require("./bot.js");
 const errorMsgs = require("./errorMsgs");
-const { banish } = require("awesome-zalgo");
+const { banish } = require("@favware/zalgo");
 
 bot.on("ready", () => {
   // When the bot is ready
